@@ -20,7 +20,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint-staged": "lint-staged",
+    "prepare": "husky"
   },
   "eslintConfig": {
     "extends": [
@@ -87,9 +89,9 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.3.3",
-    "husky": "^8.0.0",
-    "lint-staged": "^13.0.0"
+    "husky": "^9.1.6",
+    "lint-staged": "^13.0.0",
+    "prettier": "^3.3.3"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
