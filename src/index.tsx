@@ -6,13 +6,15 @@ import reportWebVitals from './reportWebVitals';
 import Login from './pages/Login';
 import './styles.css';
 
+import AppRoutes from './Routes';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
 root.render(
   <React.StrictMode>
-    <Login></Login>
+    <AppRoutes></AppRoutes>
   </React.StrictMode>,
 );
 

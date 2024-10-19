@@ -18,7 +18,7 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   //inputs
-  const [emailInput, setEmailInput] = useState<string>();
+  const [emailInput, setEmailInput] = useState<string>('');
   const [passwordInput, setPasswordInput] = useState<string>();
   const [rememberMe, setRememberMe] = useState<boolean>(false);
 
@@ -30,7 +30,7 @@ export default function LoginForm() {
   const [formValid, setFormValid] = useState<string | null>();
 
   // validação de email
-  const isEmail = (email: any) =>
+  const isEmail = (email: string) =>
     /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -149,7 +149,7 @@ export default function LoginForm() {
           onChange={(event) => setRememberMe(event.target.checked)}
           inputProps={{ 'aria-label': 'controlled' }}
         />{' '}
-        Lembrar-me
+        <span className="remeberMe">Lembrar-me</span>
       </div>
 
       <p>
@@ -159,7 +159,7 @@ export default function LoginForm() {
           startIcon={<LoginIcon />}
           fullWidth
         >
-          REGISTRAR
+          LOGIN
         </Button>
       </p>
 
