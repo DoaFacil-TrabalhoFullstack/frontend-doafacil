@@ -79,7 +79,7 @@ export default function RegisterForm() {
     }
 
     if (passwordInput.length < 5) {
-      setUsernameError(true);
+      setPasswordError(true);
       return;
     }
 
