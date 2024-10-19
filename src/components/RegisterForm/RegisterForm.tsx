@@ -7,12 +7,30 @@ import {
   IconButton,
   OutlinedInput,
   Button,
+  Alert,
 } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function RegisterForm() {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  //inputs
+  const [usernameInput, setUsernameInput] = useState<string>();
+  const [emailInput, setEmailInput] = useState<string>();
+  const [passwordInput, setPasswordInput] = useState<string>();
+
+  //erross
+  const [usernameError, setUsernameError] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState<boolean>(false);
+  const [passwordError, setPasswordError] = useState<boolean>(false);
+
+  //
+  const [formValid, setFormValid] = useState<string | null>();
+
+  // validação de email
+  const isEmail = (email: any) =>
+    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -28,12 +46,76 @@ export default function RegisterForm() {
     event.preventDefault();
   };
 
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    if (usernameError || !usernameInput) {
+      setFormValid('Preencha o campo username.');
+      return;
+    }
+
+    if (emailError || !emailInput) {
+      setFormValid('Email inválido.');
+      return;
+    }
+
+    if (passwordError || !passwordInput) {
+      setFormValid('A senha precisa ter pelo menos 5 caracteres.');
+      return;
+    }
+
+    setFormValid(null);
+
+    console.log(usernameInput);
+    console.log(emailInput);
+    console.log(passwordInput);
+  };
+
+  // Validation password
+  const handlePassword = () => {
+    if (!passwordInput) {
+      setPasswordError(true);
+      return;
+    }
+
+    if (passwordInput.length < 5) {
+      setUsernameError(true);
+      return;
+    }
+
+    setPasswordError(false);
+  };
+
+  const handleUsername = () => {
+    if (!usernameInput) {
+      setUsernameError(true);
+      return;
+    }
+
+    setUsernameError(false);
+  };
+
+  //Validation email
+
+  const handleEmail = () => {
+    if (!isEmail(emailInput)) {
+      setEmailError(true);
+      return;
+    }
+
+    setEmailError(false);
+  };
+
   return (
     <div>
       <p>
         <TextField
           id="outlined-basic"
+          error={usernameError}
           label="Username"
+          value={usernameInput}
+          onChange={(event) => setUsernameInput(event.target.value)}
+          onBlur={handleUsername}
           variant="outlined"
           fullWidth
           size="small"
@@ -42,21 +124,33 @@ export default function RegisterForm() {
       <p>
         <TextField
           id="outlined-basic"
+          error={emailError}
           label="Email"
+          value={emailInput}
+          onChange={(event) => setEmailInput(event.target.value)}
+          onBlur={handleEmail}
           variant="outlined"
           fullWidth
           size="small"
         />
       </p>
 
+      {/* Senha - começo */}
       <p>
         <FormControl sx={{ width: '100%' }} variant="outlined" size="small">
-          <InputLabel htmlFor="outlined-adornment-password">
-            Password
+          <InputLabel
+            error={passwordError}
+            htmlFor="outlined-adornment-password"
+          >
+            Senha
           </InputLabel>
           <OutlinedInput
+            error={passwordError}
             id="outlined-adornment-password"
             type={showPassword ? 'text' : 'password'}
+            value={passwordInput}
+            onChange={(event) => setPasswordInput(event.target.value)}
+            onBlur={handlePassword}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -74,12 +168,20 @@ export default function RegisterForm() {
           />
         </FormControl>
       </p>
+      {/* Senha - fim */}
 
       <p>
-        <Button variant="contained" startIcon={<LoginIcon />} fullWidth>
+        <Button
+          variant="contained"
+          onClick={handleSubmit}
+          startIcon={<LoginIcon />}
+          fullWidth
+        >
           REGISTRAR
         </Button>
       </p>
+
+      <p>{formValid && <Alert severity="error">{formValid}</Alert>}</p>
     </div>
   );
 }
