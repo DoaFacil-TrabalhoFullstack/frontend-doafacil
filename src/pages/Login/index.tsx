@@ -40,7 +40,7 @@ export default function Login() {
           />
         </div>
 
-        {checked ? <RegisterForm></RegisterForm> : <LoginForm></LoginForm>}
+        {checked ? <RegisterForm /> : <LoginForm />}
       </Paper>
     </div>
   );

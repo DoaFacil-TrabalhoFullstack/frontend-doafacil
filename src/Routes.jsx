@@ -9,8 +9,8 @@ const AppRoutes = () => {
     //Habilita navegação por rotas baseado no histórico do navegador
     <Router>
       <Routes>
-        <Route path="/" element={<Home></Home>}></Route>
-        <Route path="/login" element={<Login></Login>}></Route>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/login" element={<Login />}></Route>
       </Routes>
     </Router>
   );

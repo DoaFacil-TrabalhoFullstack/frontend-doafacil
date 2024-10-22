@@ -149,7 +149,7 @@ export default function LoginForm() {
           onChange={(event) => setRememberMe(event.target.checked)}
           inputProps={{ 'aria-label': 'controlled' }}
         />{' '}
-        <span className="remeberMe">Lembrar-me</span>
+        <span className="rememberMe">Lembrar-me</span>
       </div>
 
       <p>

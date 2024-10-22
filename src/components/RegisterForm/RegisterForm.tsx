@@ -8,9 +8,14 @@ import {
   OutlinedInput,
   Button,
   Alert,
+  Switch,
+  FormControlLabel,
 } from '@mui/material';
-import LoginIcon from '@mui/icons-material/Login';
 import React, { useState } from 'react';
+import LoginIcon from '@mui/icons-material/Login';
+
+import { CPFInput, isValidCPF } from './CPFInput';
+import { isValidCNPJ, CNPJInput } from './CNPJInput';
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -18,21 +23,38 @@ export default function RegisterForm() {
   //inputs
   const [usernameInput, setUsernameInput] = useState<string>();
   const [emailInput, setEmailInput] = useState<string>('');
+  const [phoneInput, setPhoneInput] = useState<string>();
   const [passwordInput, setPasswordInput] = useState<string>();
+  const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>();
+  const [cpfInput, setCpfInput] = useState<string>('');
+  const [cnpjInput, setCnpjInput] = useState<string>('');
 
-  //erross
+  //erros
   const [usernameError, setUsernameError] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<boolean>(false);
+  const [phoneError, setPhoneError] = useState<boolean>();
   const [passwordError, setPasswordError] = useState<boolean>(false);
+  const [confirmPasswordError, setConfirmPasswordError] =
+    useState<boolean>(false);
+  const [cpfError, setCpfError] = useState<boolean>(false);
+  const [cnpjError, setCnpjError] = useState<boolean>(false);
 
-  //
+  // response
   const [formValid, setFormValid] = useState<string | null>();
+  const [success, setSuccess] = useState<string | null>();
 
-  // validação de email
+  // option CPF/CNPJ
+  const [checked, setChecked] = useState<boolean>(false);
+
+  // form email
   const isEmail = (email: string) =>
     /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleChangeChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -44,31 +66,6 @@ export default function RegisterForm() {
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
-  };
-
-  const handleSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-
-    if (usernameError || !usernameInput) {
-      setFormValid('Preencha o campo username.');
-      return;
-    }
-
-    if (emailError || !emailInput) {
-      setFormValid('Email inválido.');
-      return;
-    }
-
-    if (passwordError || !passwordInput) {
-      setFormValid('A senha precisa ter pelo menos 5 caracteres.');
-      return;
-    }
-
-    setFormValid(null);
-
-    console.log(usernameInput);
-    console.log(emailInput);
-    console.log(passwordInput);
   };
 
   // Validation password
@@ -95,8 +92,19 @@ export default function RegisterForm() {
     setUsernameError(false);
   };
 
-  //Validation email
+  const handleConfirmPassword = () => {
+    if (!passwordInput) {
+      setPasswordError(true);
+      return;
+    }
 
+    if (confirmPasswordInput !== passwordInput) {
+      setConfirmPasswordError(true);
+      return;
+    }
+  };
+
+  //Validation email
   const handleEmail = () => {
     if (!isEmail(emailInput)) {
       setEmailError(true);
@@ -104,6 +112,88 @@ export default function RegisterForm() {
     }
 
     setEmailError(false);
+  };
+
+  //Validation Phone
+  const handlePhone = () => {
+    if (!phoneInput) {
+      setPhoneError(true);
+      return;
+    }
+
+    setEmailError(false);
+  };
+
+  // Validation CPF
+  const handleChangeCpf = (event: { target: { value: string } }) => {
+    const cpfValue = event.target.value;
+    setCpfInput(cpfValue);
+
+    // Valida o CPF após remover a máscara
+    if (cpfValue.length === 14) {
+      // Só tenta validar se o CPF estiver completo
+      setCpfError(!isValidCPF(cpfValue));
+    } else {
+      setCpfError(false);
+    }
+  };
+
+  //validation CNPJ
+  const handleChangeCnpj = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const cnpjValue = event.target.value;
+    setCnpjInput(cnpjValue);
+
+    // Valida o CNPJ após remover a máscara
+    if (cnpjValue.length === 18) {
+      // Só tenta validar se o CNPJ estiver completo
+      setCnpjError(!isValidCNPJ(cnpjValue));
+    } else {
+      setCnpjError(false);
+    }
+  };
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    if (usernameError || !usernameInput) {
+      setFormValid('Preencha o campo username.');
+      return;
+    }
+
+    if (emailError || !emailInput) {
+      setFormValid('Email inválido.');
+      return;
+    }
+
+    if (phoneError || !phoneInput) {
+      setFormValid('Preencha o campo telefone');
+      return;
+    }
+
+    if (passwordError || !passwordInput) {
+      setFormValid('A senha precisa ter pelo menos 5 caracteres.');
+      return;
+    }
+
+    if (confirmPasswordInput !== passwordInput) {
+      setFormValid('As senhas precisam ser iguais.');
+      return;
+    }
+
+    if ((cpfError && cnpjError) || (!cpfInput && !cnpjError)) {
+      setFormValid('Preencha o campo CPF/CNPJ.');
+      return;
+    }
+
+    setFormValid(null);
+
+    console.log(usernameInput);
+    console.log(emailInput);
+    console.log(passwordInput);
+    console.log(cpfInput);
+    console.log(cnpjInput);
+
+    setSuccess('Cadastrado com sucesso');
   };
 
   return (
@@ -130,6 +220,21 @@ export default function RegisterForm() {
           onChange={(event) => setEmailInput(event.target.value)}
           onBlur={handleEmail}
           variant="outlined"
+          fullWidth
+          size="small"
+        />
+      </p>
+
+      <p>
+        <TextField
+          id="outlined-basic"
+          error={phoneError}
+          label="Telefone"
+          value={phoneInput}
+          onChange={(event) => setPhoneInput(event.target.value.toString())}
+          onBlur={handlePhone}
+          variant="outlined"
+          type="number"
           fullWidth
           size="small"
         />
@@ -168,7 +273,67 @@ export default function RegisterForm() {
           />
         </FormControl>
       </p>
+
+      <p>
+        <FormControl sx={{ width: '100%' }} variant="outlined" size="small">
+          <InputLabel
+            error={confirmPasswordError}
+            htmlFor="outlined-adornment-password"
+          >
+            Confirmar senha
+          </InputLabel>
+          <OutlinedInput
+            error={confirmPasswordError}
+            id="outlined-adornment-password"
+            type={showPassword ? 'text' : 'password'}
+            value={confirmPasswordInput}
+            onChange={(event) => setConfirmPasswordInput(event.target.value)}
+            onBlur={handleConfirmPassword}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  onMouseUp={handleMouseUpPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Confirmar senha"
+          />
+        </FormControl>
+      </p>
       {/* Senha - fim */}
+
+      <p style={{ display: 'flex' }}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={checked}
+              onChange={handleChangeChecked}
+              inputProps={{ 'aria-label': 'controlled' }}
+              color="default"
+            />
+          }
+          label={checked ? 'CNPJ' : 'CPF'}
+        />
+        {checked ? (
+          <CNPJInput
+            value={cnpjInput}
+            onChange={handleChangeCnpj}
+            error={cnpjError}
+          />
+        ) : (
+          <CPFInput
+            value={cpfInput}
+            onChange={handleChangeCpf}
+            error={cpfError}
+          />
+        )}
+      </p>
 
       <p>
         <Button
@@ -182,6 +347,7 @@ export default function RegisterForm() {
       </p>
 
       <p>{formValid && <Alert severity="error">{formValid}</Alert>}</p>
+      <p>{success && <Alert severity="success">{success}</Alert>}</p>
     </div>
   );
 }
