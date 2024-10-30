@@ -13,8 +13,16 @@ import {
 import LoginIcon from '@mui/icons-material/Login';
 import Checkbox from '@mui/material/Checkbox';
 import './LoginForm.css';
+import httpClient from '../../shared/http-client/http-client';
+import { Auth } from '../../shared/interfaces/Auth.interface';
+import { useAuth } from '../../context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
+import { ApiError } from '../../shared/interfaces/ApiError.interface';
 
 export default function LoginForm() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   //inputs
@@ -47,7 +55,7 @@ export default function LoginForm() {
     event.preventDefault();
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if (emailError || !emailInput) {
@@ -60,11 +68,31 @@ export default function LoginForm() {
       return;
     }
 
-    setFormValid(null);
+    const loginUserPayload = {
+      email: emailInput,
+      password: passwordInput,
+    };
 
-    console.log(emailInput);
-    console.log(passwordInput);
-    console.log(rememberMe);
+    try {
+      const result = await httpClient.post<Auth>(
+        'users/login',
+        loginUserPayload,
+      );
+
+      const { token } = result.data;
+
+      login({}, token);
+
+      navigate('/home');
+    } catch (e: unknown) {
+      if (e instanceof AxiosError) {
+        const error = e.response?.data as ApiError;
+
+        setFormValid(error.message);
+      }
+    }
+
+    setFormValid(null);
   };
 
   // Validation password
@@ -114,8 +142,7 @@ export default function LoginForm() {
         <FormControl sx={{ width: '100%' }} variant="outlined" size="small">
           <InputLabel
             error={passwordError}
-            htmlFor="outlined-adornment-password"
-          >
+            htmlFor="outlined-adornment-password">
             Senha
           </InputLabel>
           <OutlinedInput
@@ -132,8 +159,7 @@ export default function LoginForm() {
                   onClick={handleClickShowPassword}
                   onMouseDown={handleMouseDownPassword}
                   onMouseUp={handleMouseUpPassword}
-                  edge="end"
-                >
+                  edge="end">
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
@@ -157,8 +183,7 @@ export default function LoginForm() {
           variant="contained"
           onClick={handleSubmit}
           startIcon={<LoginIcon />}
-          fullWidth
-        >
+          fullWidth>
           LOGIN
         </Button>
       </p>

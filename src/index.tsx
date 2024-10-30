@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import './styles.css';
 
 import AppRoutes from './Routes';
+import { AuthProvider } from './context/AuthProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -12,7 +13,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <AppRoutes></AppRoutes>
+     <AuthProvider>
+      <AppRoutes></AppRoutes>
+     </AuthProvider>
   </React.StrictMode>,
 );
 

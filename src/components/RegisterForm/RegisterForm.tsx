@@ -14,18 +14,28 @@ import {
 import React, { useState } from 'react';
 import LoginIcon from '@mui/icons-material/Login';
 
+import httpClient from '../../shared/http-client/http-client';
+
 import { CPFInput, isValidCPF } from './CPFInput';
 import { isValidCNPJ, CNPJInput } from './CNPJInput';
 
+import { AxiosError } from 'axios';
+import { ApiError } from '../../shared/interfaces/ApiError.interface';
+import { Auth } from '../../shared/interfaces/Auth.interface';
+import { useAuth } from '../../context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
+
 export default function RegisterForm() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   //inputs
-  const [usernameInput, setUsernameInput] = useState<string>();
+  const [usernameInput, setUsernameInput] = useState<string>('');
   const [emailInput, setEmailInput] = useState<string>('');
-  const [phoneInput, setPhoneInput] = useState<string>();
-  const [passwordInput, setPasswordInput] = useState<string>();
-  const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>();
+  const [phoneInput, setPhoneInput] = useState<string>('');
+  const [passwordInput, setPasswordInput] = useState<string>('');
+  const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>('');
   const [cpfInput, setCpfInput] = useState<string>('');
   const [cnpjInput, setCnpjInput] = useState<string>('');
 
@@ -41,7 +51,7 @@ export default function RegisterForm() {
 
   // response
   const [formValid, setFormValid] = useState<string | null>();
-  const [success, setSuccess] = useState<string | null>();
+  const [error, setError] = useState<string | null>();
 
   // option CPF/CNPJ
   const [checked, setChecked] = useState<boolean>(false);
@@ -152,48 +162,74 @@ export default function RegisterForm() {
     }
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const isValidFormValues = (): boolean => {
+    const validations = [
+      {
+        condition: usernameError || !usernameInput,
+        message: 'Preencha o campo username.',
+      },
+      { condition: emailError || !emailInput, message: 'Email inválido.' },
+      {
+        condition: phoneError || !phoneInput,
+        message: 'Preencha o campo telefone.',
+      },
+      {
+        condition: passwordError || !passwordInput,
+        message: 'A senha precisa ter pelo menos 5 caracteres.',
+      },
+      {
+        condition: confirmPasswordInput !== passwordInput,
+        message: 'As senhas precisam ser iguais.',
+      },
+      {
+        condition: (cpfError && cpfError) || (!cnpjInput && !cnpjError),
+        message: 'Preencha o campo CPF/CNPJ.',
+      },
+    ];
+
+    for (const { condition, message } of validations) {
+      if (condition) {
+        setFormValid(message);
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    if (usernameError || !usernameInput) {
-      setFormValid('Preencha o campo username.');
-      return;
+    if (isValidFormValues()) {
+      const createUserPayload = {
+        name: usernameInput,
+        email: emailInput,
+        password: passwordInput,
+        phone: phoneInput,
+        ...(!checked
+          ? { cpf: cpfInput.replace(/[^\d]+/g, '') }
+          : { cnpj: cnpjInput.replace(/[^\d]+/g, '') }),
+      };
+
+      try {
+        const result = await httpClient.post<Auth>(
+          'users/register',
+          createUserPayload,
+        );
+
+        const { token } = result.data;
+
+        login({}, token);
+
+        navigate('/home');
+      } catch (e: unknown) {
+        if (e instanceof AxiosError) {
+          const error = e.response?.data as ApiError;
+
+          setError(error.message);
+        }
+      }
     }
-
-    if (emailError || !emailInput) {
-      setFormValid('Email inválido.');
-      return;
-    }
-
-    if (phoneError || !phoneInput) {
-      setFormValid('Preencha o campo telefone');
-      return;
-    }
-
-    if (passwordError || !passwordInput) {
-      setFormValid('A senha precisa ter pelo menos 5 caracteres.');
-      return;
-    }
-
-    if (confirmPasswordInput !== passwordInput) {
-      setFormValid('As senhas precisam ser iguais.');
-      return;
-    }
-
-    if ((cpfError && cnpjError) || (!cpfInput && !cnpjError)) {
-      setFormValid('Preencha o campo CPF/CNPJ.');
-      return;
-    }
-
-    setFormValid(null);
-
-    console.log(usernameInput);
-    console.log(emailInput);
-    console.log(passwordInput);
-    console.log(cpfInput);
-    console.log(cnpjInput);
-
-    setSuccess('Cadastrado com sucesso');
   };
 
   return (
@@ -234,19 +270,17 @@ export default function RegisterForm() {
           onChange={(event) => setPhoneInput(event.target.value.toString())}
           onBlur={handlePhone}
           variant="outlined"
-          type="number"
+          type="text"
           fullWidth
           size="small"
         />
       </p>
 
-      {/* Senha - começo */}
       <p>
         <FormControl sx={{ width: '100%' }} variant="outlined" size="small">
           <InputLabel
             error={passwordError}
-            htmlFor="outlined-adornment-password"
-          >
+            htmlFor="outlined-adornment-password">
             Senha
           </InputLabel>
           <OutlinedInput
@@ -263,8 +297,7 @@ export default function RegisterForm() {
                   onClick={handleClickShowPassword}
                   onMouseDown={handleMouseDownPassword}
                   onMouseUp={handleMouseUpPassword}
-                  edge="end"
-                >
+                  edge="end">
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
@@ -278,8 +311,7 @@ export default function RegisterForm() {
         <FormControl sx={{ width: '100%' }} variant="outlined" size="small">
           <InputLabel
             error={confirmPasswordError}
-            htmlFor="outlined-adornment-password"
-          >
+            htmlFor="outlined-adornment-password">
             Confirmar senha
           </InputLabel>
           <OutlinedInput
@@ -296,8 +328,7 @@ export default function RegisterForm() {
                   onClick={handleClickShowPassword}
                   onMouseDown={handleMouseDownPassword}
                   onMouseUp={handleMouseUpPassword}
-                  edge="end"
-                >
+                  edge="end">
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
@@ -306,7 +337,6 @@ export default function RegisterForm() {
           />
         </FormControl>
       </p>
-      {/* Senha - fim */}
 
       <p style={{ display: 'flex' }}>
         <FormControlLabel
@@ -340,14 +370,13 @@ export default function RegisterForm() {
           variant="contained"
           onClick={handleSubmit}
           startIcon={<LoginIcon />}
-          fullWidth
-        >
+          fullWidth>
           REGISTRAR
         </Button>
       </p>
 
       <p>{formValid && <Alert severity="error">{formValid}</Alert>}</p>
-      <p>{success && <Alert severity="success">{success}</Alert>}</p>
+      <p>{error && <Alert severity="error">{error}</Alert>}</p>
     </div>
   );
 }

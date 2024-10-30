@@ -15,7 +15,7 @@ export default function Login() {
 
   return (
     <div className="container">
-      <Paper elevation={3} style={{ padding: '10px', width: '25%' }}>
+      <Paper elevation={3} className='form-container'>
         <div className="checkedButton">
           {checked ? (
             <Chip
