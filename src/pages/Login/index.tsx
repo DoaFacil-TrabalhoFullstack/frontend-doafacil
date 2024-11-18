@@ -14,8 +14,8 @@ export default function Login() {
   };
 
   return (
-    <div className="container">
-      <Paper elevation={3} className='form-container'>
+    <div className="containerLogin">
+      <Paper elevation={3} className="form-container">
         <div className="checkedButton">
           {checked ? (
             <Chip

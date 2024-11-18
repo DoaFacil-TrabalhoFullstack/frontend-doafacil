@@ -6,6 +6,7 @@ import './styles.css';
 
 import AppRoutes from './Routes';
 import { AuthProvider } from './context/AuthProvider';
+import Product from './pages/Produtos';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -13,9 +14,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-     <AuthProvider>
+    <AuthProvider>
       <AppRoutes></AppRoutes>
-     </AuthProvider>
+    </AuthProvider>
   </React.StrictMode>,
 );
 
