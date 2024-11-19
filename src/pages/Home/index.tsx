@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
 
 import Nav from '../../components/Nav/Nav';
 import Footer from '../../components/Footer/Footer';
 
-import homeProduct from './homeProduct';
-
 import './styles.css';
-import Product from '../Products';
 import ProductCard from '../../components/ProductCard/ProductCard';
+
+import homeProduct from './homeProduct';
 
 export default function Home() {
   const [product, setProduct] = useState(homeProduct);
@@ -25,7 +23,7 @@ export default function Home() {
     }
 
     // Filtra os produtos com base no título ou descrição
-    const filteredProducts = homeProduct.filter(
+    const filteredProducts = product.filter(
       (item) =>
         item.title.toLowerCase().includes(search.toLowerCase()) ||
         item.description.toLowerCase().includes(search.toLowerCase()),

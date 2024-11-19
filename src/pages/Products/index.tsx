@@ -14,7 +14,7 @@ const Produtos = () => {
   const productsPerPage = 18;
 
   // Total de páginas
-  const totalPages = Math.ceil(homeProduct.length / productsPerPage);
+  const totalPages = Math.ceil(product.length / productsPerPage);
 
   // Produtos da página atual
   const currentProducts = product.slice(
