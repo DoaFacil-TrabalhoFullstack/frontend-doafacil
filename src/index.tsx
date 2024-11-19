@@ -6,7 +6,7 @@ import './styles.css';
 
 import AppRoutes from './Routes';
 import { AuthProvider } from './context/AuthProvider';
-import Product from './pages/Produtos';
+import Product from './pages/Products';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

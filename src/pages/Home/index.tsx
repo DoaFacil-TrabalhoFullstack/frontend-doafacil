@@ -7,7 +7,7 @@ import Footer from '../../components/Footer/Footer';
 import homeProduct from './homeProduct';
 
 import './styles.css';
-import Product from '../Produtos';
+import Product from '../Products';
 import ProductCard from '../../components/ProductCard/ProductCard';
 
 export default function Home() {
@@ -17,6 +17,8 @@ export default function Home() {
   const [search, setSearch] = useState('');
   //Adicione ao carrinho
   const [cart, setCart] = useState([]);
+
+  const quantityHomeProducts = 5;
 
   //Pagina produto categoria
   // const category = (x: string) => {
@@ -95,17 +97,19 @@ export default function Home() {
 
               <div className="products">
                 <div className="containerProducts">
-                  {trendingProduct.map((currentProduct) => {
-                    return (
-                      <ProductCard
-                        key={currentProduct.id}
-                        title={currentProduct.title}
-                        description={currentProduct.description}
-                        imageUrl={currentProduct.image}
-                        url={'/produto/' + currentProduct.id}
-                      />
-                    );
-                  })}
+                  {trendingProduct
+                    .slice(0, quantityHomeProducts)
+                    .map((currentProduct) => {
+                      return (
+                        <ProductCard
+                          key={currentProduct.id}
+                          title={currentProduct.title}
+                          description={currentProduct.description}
+                          imageUrl={currentProduct.image}
+                          url={'/produto/' + currentProduct.id}
+                        />
+                      );
+                    })}
                 </div>
               </div>
             </div>

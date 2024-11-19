@@ -27,7 +27,10 @@ const Nav: React.FC<NavProps> = ({ search, setSearch, searchProduct }) => {
         <div className="mid_header">
           <div className="logo">
             <a href="/">
-              <img src="image/logoDoafacil.png" alt="logo"></img>
+              <img
+                src="http://localhost:3000/image/logoDoafacil.png"
+                alt="logo"
+              ></img>
             </a>
           </div>
           <div className="search_box">
