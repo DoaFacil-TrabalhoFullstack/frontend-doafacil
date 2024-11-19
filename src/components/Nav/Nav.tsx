@@ -2,8 +2,6 @@ import React from 'react';
 import { MdLocalShipping } from 'react-icons/md';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FiLogIn } from 'react-icons/fi';
-import { CiUser } from 'react-icons/ci';
-import { Link } from 'react-router-dom';
 
 import './Nav.css';
 
@@ -11,8 +9,14 @@ interface NavProps {
   search: any;
   setSearch: any;
   searchProduct: any;
+  enable: boolean;
 }
-const Nav: React.FC<NavProps> = ({ search, setSearch, searchProduct }) => {
+const Nav: React.FC<NavProps> = ({
+  search,
+  setSearch,
+  searchProduct,
+  enable,
+}) => {
   return (
     <>
       <div className="header">
@@ -33,7 +37,7 @@ const Nav: React.FC<NavProps> = ({ search, setSearch, searchProduct }) => {
               ></img>
             </a>
           </div>
-          <div className="search_box">
+          <div className={enable ? 'search_box' : 'disable_search_box'}>
             <input
               type="text"
               value={search}

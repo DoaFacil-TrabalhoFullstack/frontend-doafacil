@@ -53,6 +53,10 @@
   background: #f6f7f9;
 }
 
+.header .mid_header .disable_search_box {
+  display: none;
+}
+
 .header .mid_header .search_box button {
   padding: 10px 10px;
   border-top-left-radius: 5px;

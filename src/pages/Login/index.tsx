@@ -20,6 +20,7 @@ export default function Login() {
         search={undefined}
         setSearch={undefined}
         searchProduct={undefined}
+        enable={false}
       ></Nav>
       <div className="containerLogin">
         <Paper elevation={3} className="form-container">

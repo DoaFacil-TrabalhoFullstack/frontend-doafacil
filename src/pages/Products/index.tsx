@@ -61,6 +61,7 @@ const Produtos = () => {
         search={search}
         setSearch={setSearch}
         searchProduct={searchProduct}
+        enable={true}
       />
 
       <div className="products">

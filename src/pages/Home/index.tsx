@@ -59,6 +59,7 @@ export default function Home() {
         search={search}
         setSearch={setSearch}
         searchProduct={searchProduct}
+        enable={true}
       />
       <div className="home">
         <div className="trending">

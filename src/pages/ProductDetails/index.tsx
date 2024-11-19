@@ -46,6 +46,7 @@ const ProductDetails = () => {
         search={undefined}
         setSearch={undefined}
         searchProduct={undefined}
+        enable={false}
       ></Nav>
       <div className="containerProductDetails">
         <div className="cardProductDetails">
