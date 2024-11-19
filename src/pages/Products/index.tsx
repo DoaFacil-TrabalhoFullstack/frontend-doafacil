@@ -6,6 +6,7 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 import Nav from '../../components/Nav/Nav';
 
 const Produtos = () => {
+  const [product, setProduct] = useState(homeProduct);
   const [search, setSearch] = useState('');
 
   // Estado para paginação
@@ -16,7 +17,7 @@ const Produtos = () => {
   const totalPages = Math.ceil(homeProduct.length / productsPerPage);
 
   // Produtos da página atual
-  const currentProducts = homeProduct.slice(
+  const currentProducts = product.slice(
     (currentPage - 1) * productsPerPage,
     currentPage * productsPerPage,
   );
@@ -34,9 +35,33 @@ const Produtos = () => {
     }
   };
 
+  const searchProduct = () => {
+    if (search.trim() === '') {
+      setProduct(homeProduct);
+      return;
+    }
+
+    // Filtra os produtos com base no título ou descrição
+    const filteredProducts = homeProduct.filter(
+      (item) =>
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.description.toLowerCase().includes(search.toLowerCase()),
+    );
+
+    if (filteredProducts.length === 0) {
+      alert('Nenhum produto encontrado!');
+    } else {
+      setProduct(filteredProducts); // Atualiza os produtos exibidos
+    }
+  };
+
   return (
     <>
-      <Nav search={search} setSearch={setSearch} searchProduct={''} />
+      <Nav
+        search={search}
+        setSearch={setSearch}
+        searchProduct={searchProduct}
+      />
 
       <div className="products">
         <div className="containerProducts">
@@ -54,13 +79,21 @@ const Produtos = () => {
 
       {/* Controles de paginação */}
       <div className="pagination">
-        <button onClick={handlePrevPage} disabled={currentPage === 1}>
+        <button
+          onClick={handlePrevPage}
+          disabled={currentPage === 1 || product.length <= productsPerPage}
+        >
           Anterior
         </button>
         <span>
           Página {currentPage} de {totalPages}
         </span>
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+        <button
+          onClick={handleNextPage}
+          disabled={
+            currentPage === totalPages || product.length <= productsPerPage
+          }
+        >
           Próxima
         </button>
       </div>

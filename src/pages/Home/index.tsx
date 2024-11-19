@@ -11,61 +11,33 @@ import Product from '../Products';
 import ProductCard from '../../components/ProductCard/ProductCard';
 
 export default function Home() {
-  //Pagina produto
   const [product, setProduct] = useState(homeProduct);
-  //Barra de pesquisa
   const [search, setSearch] = useState('');
-  //Adicione ao carrinho
-  const [cart, setCart] = useState([]);
+  const [recentProducts, setRecentProducts] = useState(homeProduct);
 
   const quantityHomeProducts = 5;
 
-  //Pagina produto categoria
-  // const category = (x: string) => {
+  // Função para buscar produtos com base na pesquisa
+  const searchProduct = () => {
+    if (search.trim() === '') {
+      setProduct(homeProduct);
+      return;
+    }
 
-  //   const categoryfilter = homeProduct.filter((product) => {
-  //     return product.cat === x;
-  //   })
-  //   setProduct(categoryfilter)
-  // }
+    // Filtra os produtos com base no título ou descrição
+    const filteredProducts = homeProduct.filter(
+      (item) =>
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.description.toLowerCase().includes(search.toLowerCase()),
+    );
 
-  //Todas as categorias
-  const categoryAll = () => {
-    setProduct(homeProduct);
-  };
-
-  //Barra de pesquisa
-  const searchLength = (search || []).length === 0;
-
-  // const searchProduct = () => {
-
-  //   if (searchLength) {
-  //     alert("Por favor digite algo")
-  //     setProduct(homeProduct)
-  //   }
-  //   else {
-
-  //     const searchFilter = homeProduct.filter((x) => {
-  //       return x.cat === search
-  //     })
-  //     setProduct(searchFilter)
-  //   }
-  // }
-
-  //Adicionar ao carrinho
-  const addToCart = (product: any) => {
-    const exist = cart.find((x: any) => {
-      return x.id === product.id;
-    });
-    if (exist) {
-      alert('este produto já foi adicionado ao carrinho');
+    if (filteredProducts.length === 0) {
+      alert('Nenhum produto encontrado!');
     } else {
-      setCart(cart.concat({ ...product, qty: 1 }));
-      alert('Adicionado ao carrinho');
+      setProduct(filteredProducts); // Atualiza os produtos exibidos
+      setRecentProducts(filteredProducts); // Atualiza a seção de "recentProducts"
     }
   };
-
-  const [trendingProduct, setTrendingProduct] = useState(homeProduct);
 
   //Filtrando por produtos (Novo, destaque e mais doado)
 
@@ -76,28 +48,33 @@ export default function Home() {
   //   setTrendingProduct(filterproduct)
   // }
   //produtos em alta
-  const allTrendingProduct = () => {
-    setTrendingProduct(homeProduct);
+  const mostRecentProducts = () => {
+    setRecentProducts(homeProduct);
+    setProduct(homeProduct);
   };
 
   return (
     <>
-      <Nav search={search} setSearch={setSearch} searchProduct={''} />
+      <Nav
+        search={search}
+        setSearch={setSearch}
+        searchProduct={searchProduct}
+      />
       <div className="home">
         <div className="trending">
           <div className="container">
             <div className="container_box">
               <div className="header">
                 <div className="heading">
-                  <a href="#" onClick={() => allTrendingProduct()}>
-                    <h2>Produto em alta</h2>
+                  <a href="#" onClick={() => mostRecentProducts()}>
+                    <h2>Produtos recém adicionados</h2>
                   </a>
                 </div>
               </div>
 
               <div className="products">
                 <div className="containerProducts">
-                  {trendingProduct
+                  {recentProducts
                     .slice(0, quantityHomeProducts)
                     .map((currentProduct) => {
                       return (
