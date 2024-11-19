@@ -12,12 +12,14 @@ import {
 } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import Checkbox from '@mui/material/Checkbox';
+
 import './LoginForm.css';
+import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
+
 import httpClient from '../../shared/http-client/http-client';
 import { Auth } from '../../shared/interfaces/Auth.interface';
 import { useAuth } from '../../context/AuthProvider';
-import { useNavigate } from 'react-router-dom';
-import { AxiosError } from 'axios';
 import { ApiError } from '../../shared/interfaces/ApiError.interface';
 
 export default function LoginForm() {
@@ -122,7 +124,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div>
+    <div className="containerLoginForm">
       <p>
         <TextField
           id="outlined-basic"
@@ -142,7 +144,8 @@ export default function LoginForm() {
         <FormControl sx={{ width: '100%' }} variant="outlined" size="small">
           <InputLabel
             error={passwordError}
-            htmlFor="outlined-adornment-password">
+            htmlFor="outlined-adornment-password"
+          >
             Senha
           </InputLabel>
           <OutlinedInput
@@ -159,7 +162,8 @@ export default function LoginForm() {
                   onClick={handleClickShowPassword}
                   onMouseDown={handleMouseDownPassword}
                   onMouseUp={handleMouseUpPassword}
-                  edge="end">
+                  edge="end"
+                >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
@@ -170,20 +174,21 @@ export default function LoginForm() {
       </p>
       {/* Senha - fim */}
 
-      <div>
+      {/* <div>
         <Checkbox
           onChange={(event) => setRememberMe(event.target.checked)}
           inputProps={{ 'aria-label': 'controlled' }}
         />{' '}
         <span className="rememberMe">Lembrar-me</span>
-      </div>
+      </div> */}
 
       <p>
         <Button
           variant="contained"
           onClick={handleSubmit}
           startIcon={<LoginIcon />}
-          fullWidth>
+          fullWidth
+        >
           LOGIN
         </Button>
       </p>

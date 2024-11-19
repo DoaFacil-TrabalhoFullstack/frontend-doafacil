@@ -13,17 +13,18 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import LoginIcon from '@mui/icons-material/Login';
+import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 import httpClient from '../../shared/http-client/http-client';
-
-import { CPFInput, isValidCPF } from './CPFInput';
-import { isValidCNPJ, CNPJInput } from './CNPJInput';
-
-import { AxiosError } from 'axios';
 import { ApiError } from '../../shared/interfaces/ApiError.interface';
 import { Auth } from '../../shared/interfaces/Auth.interface';
 import { useAuth } from '../../context/AuthProvider';
-import { useNavigate } from 'react-router-dom';
+
+import { isValidCNPJ, CNPJInput } from './CNPJInput';
+import { CPFInput, isValidCPF } from './CPFInput';
+
+import './RegisterForm.css';
 
 export default function RegisterForm() {
   const { login } = useAuth();
@@ -233,7 +234,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <div>
+    <div className="containerRegisterForm">
       <p>
         <TextField
           id="outlined-basic"
@@ -280,7 +281,8 @@ export default function RegisterForm() {
         <FormControl sx={{ width: '100%' }} variant="outlined" size="small">
           <InputLabel
             error={passwordError}
-            htmlFor="outlined-adornment-password">
+            htmlFor="outlined-adornment-password"
+          >
             Senha
           </InputLabel>
           <OutlinedInput
@@ -297,7 +299,8 @@ export default function RegisterForm() {
                   onClick={handleClickShowPassword}
                   onMouseDown={handleMouseDownPassword}
                   onMouseUp={handleMouseUpPassword}
-                  edge="end">
+                  edge="end"
+                >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
@@ -311,7 +314,8 @@ export default function RegisterForm() {
         <FormControl sx={{ width: '100%' }} variant="outlined" size="small">
           <InputLabel
             error={confirmPasswordError}
-            htmlFor="outlined-adornment-password">
+            htmlFor="outlined-adornment-password"
+          >
             Confirmar senha
           </InputLabel>
           <OutlinedInput
@@ -328,7 +332,8 @@ export default function RegisterForm() {
                   onClick={handleClickShowPassword}
                   onMouseDown={handleMouseDownPassword}
                   onMouseUp={handleMouseUpPassword}
-                  edge="end">
+                  edge="end"
+                >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
@@ -370,7 +375,8 @@ export default function RegisterForm() {
           variant="contained"
           onClick={handleSubmit}
           startIcon={<LoginIcon />}
-          fullWidth>
+          fullWidth
+        >
           REGISTRAR
         </Button>
       </p>
