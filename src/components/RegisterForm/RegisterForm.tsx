@@ -183,7 +183,7 @@ export default function RegisterForm() {
         message: 'As senhas precisam ser iguais.',
       },
       {
-        condition: (cpfError && cpfError) || (!cnpjInput && !cnpjError),
+        condition: (cpfError && cnpjError) || (!cpfInput && !cnpjInput),
         message: 'Preencha o campo CPF/CNPJ.',
       },
     ];
@@ -214,7 +214,7 @@ export default function RegisterForm() {
 
       try {
         const result = await httpClient.post<Auth>(
-          'users/register',
+          'users/create',
           createUserPayload,
         );
 

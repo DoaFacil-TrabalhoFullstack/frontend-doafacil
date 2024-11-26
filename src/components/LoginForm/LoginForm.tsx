@@ -76,10 +76,7 @@ export default function LoginForm() {
     };
 
     try {
-      const result = await httpClient.post<Auth>(
-        'users/login',
-        loginUserPayload,
-      );
+      const result = await httpClient.post<Auth>('auth', loginUserPayload);
 
       const { token } = result.data;
 
