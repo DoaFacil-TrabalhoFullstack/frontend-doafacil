@@ -6,8 +6,6 @@ import homeProduct from '../Home/homeProduct';
 import './ProductDetails.css';
 import { Button } from '@mui/material';
 
-import Nav from '../../components/Nav/Nav';
-
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -42,12 +40,6 @@ const ProductDetails = () => {
 
   return (
     <>
-      <Nav
-        search={undefined}
-        setSearch={undefined}
-        searchProduct={undefined}
-        enable={false}
-      ></Nav>
       <div className="containerProductDetails">
         <div className="cardProductDetails">
           <img

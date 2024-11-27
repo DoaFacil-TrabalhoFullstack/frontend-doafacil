@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import reportWebVitals from './reportWebVitals';
 import './styles.css';
+import './components/Nav/Nav.css';
 
-import AppRoutes from './Routes';
-import { AuthProvider } from './context/AuthProvider';
-import Product from './pages/Products';
+import App from './App';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -14,9 +13,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <AuthProvider>
-      <AppRoutes></AppRoutes>
-    </AuthProvider>
+    <App />
   </React.StrictMode>,
 );
 

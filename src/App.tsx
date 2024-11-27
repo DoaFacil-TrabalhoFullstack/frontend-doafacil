@@ -1,18 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdLocalShipping } from 'react-icons/md';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FiLogIn } from 'react-icons/fi';
+import { Button } from '@mui/material';
 
-import './Nav.css';
+import AppRoutes from './Routes';
+import Nav from './components/Nav/Nav';
+import { AuthProvider } from './context/AuthProvider';
 
-interface NavProps {
-  search: any;
-  setSearch: any;
-  searchProduct: any;
-}
-const Nav: React.FC<NavProps> = ({ search, setSearch, searchProduct }) => {
+function App() {
+  const token = localStorage.getItem('token');
+  //const [userName, setUserName] = useState("");
+
+  // useEffect(() => {
+  //     const storedUsername = localStorage.getItem("userName");
+  //     if (storedUsername) {
+  //         setUserName(storedUsername);
+  //     }
+  // }, []);
+
+  // const handleLogin = () => {
+  //     alert("Por favor, faça o login primeiro.");
+  // }
+
+  // const cadastrarProduto = () => {
+  //     alert('Carregar página cadastrar produto');
+  // }
+
+  const handleLogout = () => {
+    localStorage.clear();
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 300);
+  };
+
   return (
-    <>
+    <AuthProvider>
       <div className="header">
         <div className="top_header">
           <div className="icon">
@@ -31,23 +55,18 @@ const Nav: React.FC<NavProps> = ({ search, setSearch, searchProduct }) => {
               ></img>
             </a>
           </div>
-          <div className="search_box">
-            <input
-              type="text"
-              value={search}
-              placeholder="search"
-              onChange={(e) => setSearch(e.target.value)}
-            ></input>
-            <button onClick={searchProduct}>
-              <AiOutlineSearch />
-            </button>
-          </div>
           <div className="user">
             <div className="icon">
               <FiLogIn />
             </div>
             <div className="login_link">
-              <a href="/login">Logout</a>
+              {token ? (
+                <a href="/" onClick={handleLogout}>
+                  Logout
+                </a>
+              ) : (
+                <a href="/login">Login</a>
+              )}
             </div>
           </div>
         </div>
@@ -71,8 +90,9 @@ const Nav: React.FC<NavProps> = ({ search, setSearch, searchProduct }) => {
           </ul>
         </div>
       </div>
-    </>
+      <AppRoutes></AppRoutes>
+    </AuthProvider>
   );
-};
+}
 
-export default Nav;
+export default App;

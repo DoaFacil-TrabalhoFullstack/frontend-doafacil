@@ -5,7 +5,6 @@ import { Face, Lock } from '@mui/icons-material';
 
 import RegisterForm from '../../components/RegisterForm/RegisterForm';
 import LoginForm from '../../components/LoginForm/LoginForm';
-import Nav from '../../components/Nav/Nav';
 
 export default function Login() {
   const [checked, setChecked] = React.useState(false);
@@ -16,12 +15,6 @@ export default function Login() {
 
   return (
     <>
-      <Nav
-        search={undefined}
-        setSearch={undefined}
-        searchProduct={undefined}
-        enable={false}
-      ></Nav>
       <div className="containerLogin">
         <Paper elevation={3} className="form-container">
           <div className="checkedButton">

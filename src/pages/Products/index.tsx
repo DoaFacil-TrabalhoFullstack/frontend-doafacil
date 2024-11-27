@@ -57,12 +57,12 @@ const Produtos = () => {
 
   return (
     <>
-      <Nav
+      {/* <Nav
         search={search}
         setSearch={setSearch}
         searchProduct={searchProduct}
         enable={true}
-      />
+      /> */}
 
       <div className="products">
         <div className="containerProducts">

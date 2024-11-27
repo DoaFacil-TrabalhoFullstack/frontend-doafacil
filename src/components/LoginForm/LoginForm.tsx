@@ -11,7 +11,6 @@ import {
   Alert,
 } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
-import Checkbox from '@mui/material/Checkbox';
 
 import './LoginForm.css';
 import { useNavigate } from 'react-router-dom';
@@ -30,7 +29,6 @@ export default function LoginForm() {
   //inputs
   const [emailInput, setEmailInput] = useState<string>('');
   const [passwordInput, setPasswordInput] = useState<string>();
-  const [rememberMe, setRememberMe] = useState<boolean>(false);
 
   //erross
   const [emailError, setEmailError] = useState<boolean>(false);
@@ -80,9 +78,15 @@ export default function LoginForm() {
 
       const { token } = result.data;
 
+      localStorage.setItem('emailUser', loginUserPayload.email);
+
+      console.log(result.data);
+      alert('Logado com sucesso');
+
       login({}, token);
 
-      navigate('/home');
+      navigate('/');
+      window.location.reload();
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         const error = e.response?.data as ApiError;

@@ -46,6 +46,7 @@ export default function Home() {
   //   setTrendingProduct(filterproduct)
   // }
   //produtos em alta
+
   const mostRecentProducts = () => {
     setRecentProducts(homeProduct);
     setProduct(homeProduct);
@@ -53,12 +54,6 @@ export default function Home() {
 
   return (
     <>
-      <Nav
-        search={search}
-        setSearch={setSearch}
-        searchProduct={searchProduct}
-        enable={true}
-      />
       <div className="home">
         <div className="trending">
           <div className="container">
