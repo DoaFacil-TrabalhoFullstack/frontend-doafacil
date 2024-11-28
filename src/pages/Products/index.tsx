@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
 import './ProdutoStyles.css';
+import { AiOutlineSearch } from 'react-icons/ai';
+
 import homeProduct from '../Home/homeProduct';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import Nav from '../../components/Nav/Nav';
@@ -57,12 +59,17 @@ const Produtos = () => {
 
   return (
     <>
-      {/* <Nav
-        search={search}
-        setSearch={setSearch}
-        searchProduct={searchProduct}
-        enable={true}
-      /> */}
+      <div className="search_box">
+        <input
+          type="text"
+          value={search}
+          placeholder="Pesquisar"
+          onChange={(e) => setSearch(e.target.value)}
+        ></input>
+        <button onClick={searchProduct}>
+          <AiOutlineSearch />
+        </button>
+      </div>
 
       <div className="products">
         <div className="containerProducts">

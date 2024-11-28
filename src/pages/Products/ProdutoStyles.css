@@ -212,3 +212,46 @@
 .pagination span {
   font-size: 16px;
 }
+
+.search_box {
+  display: flex;
+  justify-content: center;
+  margin: 25px 0;
+}
+
+.search_box input {
+  padding: 10px 10px;
+  outline: none;
+  background: none;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  width: 50%;
+  border: none;
+  background: #f6f7f9;
+}
+
+.search_box button {
+  padding: 10px 10px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  width: 50px;
+  background: #31697a;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 30px;
+  transition: 0.5s;
+  font-weight: 600;
+}
+
+.search_box button:hover {
+  background: #4da5c0;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .search_box input {
+    width: 100%;
+    margin: 0 0 0 15px;
+  }
+}
