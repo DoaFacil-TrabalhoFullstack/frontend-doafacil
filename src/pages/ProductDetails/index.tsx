@@ -6,8 +6,18 @@ import homeProduct from '../Home/homeProduct';
 import './ProductDetails.css';
 import { Button } from '@mui/material';
 
+import httpClient from '../../shared/http-client/http-client';
+
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+}
+
 const ProductDetails = () => {
   const { id } = useParams();
+  const [products, setProducts] = useState<Product[]>([]);
+  const token = localStorage.getItem('token');
 
   //   useEffect(() => {
   //     // Buscar detalhes do produto pelo ID
@@ -23,7 +33,25 @@ const ProductDetails = () => {
   //     //   });
   //   }, [id]);
 
-  const filterProduct = homeProduct.find(
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await httpClient.get<Product[]>('/products/list', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setProducts(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const filterProduct = products.find(
     (produto) => produto.id.toString() === id,
   );
   console.log(filterProduct);
@@ -50,16 +78,10 @@ const ProductDetails = () => {
     <>
       <div className="containerProductDetails">
         <div className="cardProductDetails">
-          <img
-            src={'http://localhost:3000/' + filterProduct?.image}
-            alt={filterProduct?.title}
-            style={{ width: '300px', height: '200px', objectFit: 'cover' }}
-          />
-          <h1>{filterProduct?.title}</h1>
+          <h1>{filterProduct?.name}</h1>
           <p className="descriptionProductDetails">
             {filterProduct?.description}
           </p>
-          <p>Fornecedor: Fulano</p>
           <p>
             {verifyUserAndDonator() ? (
               <Button variant="outlined" color="success" disabled>

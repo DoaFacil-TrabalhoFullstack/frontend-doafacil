@@ -1,29 +1,58 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import './ProdutoStyles.css';
 import { AiOutlineSearch } from 'react-icons/ai';
+import {
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+} from '@mui/material';
 
-import homeProduct from '../Home/homeProduct';
 import ProductCard from '../../components/ProductCard/ProductCard';
+import httpClient from '../../shared/http-client/http-client';
+
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+}
 
 const Produtos = () => {
-  const [product, setProduct] = useState(homeProduct);
+  const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
 
   // Estado para paginação
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 18;
 
-  // Total de páginas
-  const totalPages = Math.ceil(product.length / productsPerPage);
+  const token = localStorage.getItem('token');
 
-  // Produtos da página atual
-  const currentProducts = product.slice(
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await httpClient.get<Product[]>('/products/list', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setProducts(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
+  const currentProducts = products.slice(
     (currentPage - 1) * productsPerPage,
     currentPage * productsPerPage,
   );
 
-  // Funções de navegação
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
@@ -38,21 +67,19 @@ const Produtos = () => {
 
   const searchProduct = () => {
     if (search.trim() === '') {
-      setProduct(homeProduct);
       return;
     }
 
-    // Filtra os produtos com base no título ou descrição
-    const filteredProducts = homeProduct.filter(
+    const filteredProducts = products.filter(
       (item) =>
-        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.name.toLowerCase().includes(search.toLowerCase()) ||
         item.description.toLowerCase().includes(search.toLowerCase()),
     );
 
     if (filteredProducts.length === 0) {
       alert('Nenhum produto encontrado!');
     } else {
-      setProduct(filteredProducts); // Atualiza os produtos exibidos
+      setProducts(filteredProducts);
     }
   };
 
@@ -73,22 +100,37 @@ const Produtos = () => {
       <div className="products">
         <div className="containerProducts">
           {currentProducts.map((currentProduct) => (
-            <ProductCard
+            <Card
+              sx={{ minWidth: 275, margin: '0 10px' }}
               key={currentProduct.id}
-              title={currentProduct.title}
-              description={currentProduct.description}
-              imageUrl={currentProduct.image}
-              url={'/produto/' + currentProduct.id}
-            />
+            >
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  {currentProduct.name}
+                </Typography>
+                <Typography variant="body2">
+                  {currentProduct.description}
+                  <br />
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  size="small"
+                  variant="contained"
+                  href={'/produto/' + currentProduct.id}
+                >
+                  Ver mais
+                </Button>
+              </CardActions>
+            </Card>
           ))}
         </div>
       </div>
 
-      {/* Controles de paginação */}
       <div className="pagination">
         <button
           onClick={handlePrevPage}
-          disabled={currentPage === 1 || product.length <= productsPerPage}
+          disabled={currentPage === 1 || products.length <= productsPerPage}
         >
           Anterior
         </button>
@@ -98,7 +140,7 @@ const Produtos = () => {
         <button
           onClick={handleNextPage}
           disabled={
-            currentPage === totalPages || product.length <= productsPerPage
+            currentPage === totalPages || products.length <= productsPerPage
           }
         >
           Próxima
