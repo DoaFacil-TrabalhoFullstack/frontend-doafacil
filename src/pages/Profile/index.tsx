@@ -8,6 +8,7 @@ import {
   Grid,
 } from '@mui/material';
 import { Edit } from '@mui/icons-material';
+import axios from 'axios';
 
 const Profile = () => {
   const [userData, setUserData] = useState({
@@ -15,25 +16,55 @@ const Profile = () => {
     email: '',
     password: '',
     phone: '',
-    cpfOrCnpj: '',
+    cpf: '',
+    cnpj: '',
   });
 
   const [loading, setLoading] = useState(false);
 
+  const fetchUserData = async () => {
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('emailUser');
+
+    if (!email || !token) {
+      console.error('Usuarios não localizados');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await axios.get('http://localhost:8080/v1/users/list', {
+        params: { emailUser: email },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const user = response.data;
+      console.log(response.data);
+
+      setUserData({
+        name: user.name,
+        email: user.email,
+        password: '',
+        phone: user.phone,
+        cpf: user.cpf,
+        cnpj: user.cnpj,
+      });
+    } catch (error: any) {
+      console.error(
+        'Erro ao buscar os dados do usuário:',
+        error.response || error,
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // chama user no backend
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      const fetchedData = {
-        name: 'JOAO',
-        email: 'joao@example.com',
-        password: '123456',
-        phone: '11999999999',
-        cpfOrCnpj: '123.456.789-00',
-      };
-      setUserData(fetchedData);
-      setLoading(false);
-    }, 1000);
+    fetchUserData();
   }, []);
 
   const handleInputChange = (e: any) => {
@@ -44,9 +75,37 @@ const Profile = () => {
     }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log('Dados enviados: ', userData);
+
+    const token = localStorage.getItem('token');
+
+    try {
+      const response = await axios.put(
+        'http://localhost:8080/v1/users/update',
+        {
+          name: userData.name,
+          email: userData.email, // Email deve ser enviado, pois ele identifica o usuário
+          phone: userData.phone,
+          cpf: userData.cpf,
+          cnpj: userData.cnpj,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      console.log('Usuário atualizado com sucesso:', response.data);
+      alert('Informações atualizadas com sucesso!');
+    } catch (error: any) {
+      console.error(
+        'Erro ao atualizar as informações do usuário:',
+        error.response || error,
+      );
+      alert('Erro ao atualizar as informações. Tente novamente.');
+    }
   };
 
   if (loading) {
@@ -118,7 +177,7 @@ const Profile = () => {
                 fullWidth
                 label="CPF ou CNPJ"
                 name="cpfOrCnpj"
-                value={userData.cpfOrCnpj}
+                value={userData.cpf ? userData.cpf : userData.cnpj}
                 onChange={handleInputChange}
                 variant="outlined"
               />
