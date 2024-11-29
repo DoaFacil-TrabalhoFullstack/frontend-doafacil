@@ -1,41 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import Nav from '../../components/Nav/Nav';
 import Footer from '../../components/Footer/Footer';
 
 import './styles.css';
-import ProductCard from '../../components/ProductCard/ProductCard';
+import httpClient from '../../shared/http-client/http-client';
+import { Product } from '../../shared/interfaces/Product.interface';
 
-import homeProduct from './homeProduct';
+import {
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+} from '@mui/material';
 
 export default function Home() {
-  const [product, setProduct] = useState(homeProduct);
+  const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
-  const [recentProducts, setRecentProducts] = useState(homeProduct);
 
   const quantityHomeProducts = 5;
 
-  // Função para buscar produtos com base na pesquisa
-  const searchProduct = () => {
-    if (search.trim() === '') {
-      setProduct(homeProduct);
-      return;
-    }
+  const token = localStorage.getItem('token');
 
-    // Filtra os produtos com base no título ou descrição
-    const filteredProducts = product.filter(
-      (item) =>
-        item.title.toLowerCase().includes(search.toLowerCase()) ||
-        item.description.toLowerCase().includes(search.toLowerCase()),
-    );
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await httpClient.get<Product[]>('/products/list', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setProducts(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    };
 
-    if (filteredProducts.length === 0) {
-      alert('Nenhum produto encontrado!');
-    } else {
-      setProduct(filteredProducts); // Atualiza os produtos exibidos
-      setRecentProducts(filteredProducts); // Atualiza a seção de "recentProducts"
-    }
-  };
+    fetchProducts();
+  }, []);
 
   //Filtrando por produtos (Novo, destaque e mais doado)
 
@@ -47,11 +50,6 @@ export default function Home() {
   // }
   //produtos em alta
 
-  const mostRecentProducts = () => {
-    setRecentProducts(homeProduct);
-    setProduct(homeProduct);
-  };
-
   return (
     <>
       <div className="home">
@@ -60,25 +58,39 @@ export default function Home() {
             <div className="container_box">
               <div className="header">
                 <div className="heading">
-                  <a href="#" onClick={() => mostRecentProducts()}>
-                    <h2>Produtos recém adicionados</h2>
-                  </a>
+                  <h2 style={{ color: 'white' }}>Produtos recém adicionados</h2>
                 </div>
               </div>
 
               <div className="products">
                 <div className="containerProducts">
-                  {recentProducts
+                  {products
                     .slice(0, quantityHomeProducts)
                     .map((currentProduct) => {
                       return (
-                        <ProductCard
+                        <Card
+                          sx={{ minWidth: 275, margin: '50px 10px' }}
                           key={currentProduct.id}
-                          title={currentProduct.title}
-                          description={currentProduct.description}
-                          imageUrl={currentProduct.image}
-                          url={'/produto/' + currentProduct.id}
-                        />
+                        >
+                          <CardContent>
+                            <Typography variant="h5" component="div">
+                              {currentProduct.name}
+                            </Typography>
+                            <Typography variant="body2">
+                              {currentProduct.description}
+                              <br />
+                            </Typography>
+                          </CardContent>
+                          <CardActions>
+                            <Button
+                              size="small"
+                              variant="contained"
+                              href={'/produto/' + currentProduct.id}
+                            >
+                              Ver mais
+                            </Button>
+                          </CardActions>
+                        </Card>
                       );
                     })}
                 </div>

@@ -9,20 +9,13 @@ import {
   Button,
 } from '@mui/material';
 
-import ProductCard from '../../components/ProductCard/ProductCard';
 import httpClient from '../../shared/http-client/http-client';
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-}
+import { Product } from '../../shared/interfaces/Product.interface';
 
 const Produtos = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
 
-  // Estado para paginação
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 18;
 

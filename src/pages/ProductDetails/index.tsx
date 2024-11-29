@@ -7,12 +7,7 @@ import './ProductDetails.css';
 import { Button } from '@mui/material';
 
 import httpClient from '../../shared/http-client/http-client';
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-}
+import { Product } from '../../shared/interfaces/Product.interface';
 
 const ProductDetails = () => {
   const { id } = useParams();
