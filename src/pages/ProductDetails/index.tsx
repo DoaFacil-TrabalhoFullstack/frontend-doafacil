@@ -8,8 +8,6 @@ import { Button } from '@mui/material';
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   //   useEffect(() => {
   //     // Buscar detalhes do produto pelo ID
@@ -29,6 +27,16 @@ const ProductDetails = () => {
     (produto) => produto.id.toString() === id,
   );
   console.log(filterProduct);
+
+  function verifyUserAndDonator(): boolean {
+    const donator = localStorage.getItem('typePerson');
+    const emailUser = localStorage.getItem('emailUser');
+    if (donator || !emailUser) {
+      return true;
+    }
+
+    return false;
+  }
 
   // if (loading) {
   //     return <p>Carregando detalhes do produto...</p>;
@@ -53,9 +61,21 @@ const ProductDetails = () => {
           </p>
           <p>Fornecedor: Fulano</p>
           <p>
-            <Button variant="outlined" color="success">
-              Tenho interesse
-            </Button>
+            {verifyUserAndDonator() ? (
+              <Button variant="outlined" color="success" disabled>
+                Tenho interesse
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                color="success"
+                onClick={() => {
+                  console.log('clciked');
+                }}
+              >
+                Tenho interesse
+              </Button>
+            )}
           </p>
         </div>
       </div>

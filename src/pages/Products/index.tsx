@@ -5,7 +5,6 @@ import { AiOutlineSearch } from 'react-icons/ai';
 
 import homeProduct from '../Home/homeProduct';
 import ProductCard from '../../components/ProductCard/ProductCard';
-import Nav from '../../components/Nav/Nav';
 
 const Produtos = () => {
   const [product, setProduct] = useState(homeProduct);

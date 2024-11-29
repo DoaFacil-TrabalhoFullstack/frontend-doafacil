@@ -5,19 +5,47 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import AppRoutes from './Routes';
 import { AuthProvider } from './context/AuthProvider';
-import './styles.css';
 
-function App() {
+import './styles.css';
+import axios from 'axios';
+
+const App = () => {
   const token = localStorage.getItem('token');
-  const [email, setEmail] = useState('');
-  //const [userName, setUserName] = useState("");
+  const email = localStorage.getItem('emailUser');
+  const [username, setUsername] = useState('');
+  const [isDonator, setIsDonator] = useState(false);
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('emailUser');
     if (storedEmail) {
-      setEmail(storedEmail);
+      getUsername();
     }
   }, []);
+
+  const getUsername = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/v1/users/list', {
+        params: { emailUser: email },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const user = response.data;
+      console.log(user);
+      setUsername(user.name);
+
+      if (user.cnpj) {
+        setIsDonator(true);
+        localStorage.setItem('typePerson', 'JuridicalPerson');
+      }
+    } catch (error: any) {
+      console.error(
+        'Erro ao buscar os dados do usuário:',
+        error.response || error,
+      );
+    }
+  };
 
   // const handleLogin = () => {
   //     alert("Por favor, faça o login primeiro.");
@@ -59,7 +87,7 @@ function App() {
           {token ? (
             <a href="/profile" className="profile">
               <AccountCircleIcon />
-              <span className="username">{email}</span>
+              <span className="username">{username}</span>
             </a>
           ) : (
             <div></div>
@@ -93,16 +121,30 @@ function App() {
               </a>
             </li>
             <li>
-              <a href="/cart" className="link">
-                Carrinho
-              </a>
+              {isDonator ? (
+                <a href="/meus-produtos" className="link">
+                  Meus produtos
+                </a>
+              ) : (
+                <a href="/meus-interesses" className="link">
+                  Meus interesses
+                </a>
+              )}
             </li>
           </ul>
+
+          {isDonator ? (
+            <a className="btnCadastroProduto" href="/cadastro-produto">
+              Cadastrar produto
+            </a>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
       <AppRoutes></AppRoutes>
     </AuthProvider>
   );
-}
+};
 
 export default App;
