@@ -220,9 +220,11 @@ export default function RegisterForm() {
 
         const { token } = result.data;
 
+        console.log(result);
+
         login({}, token);
 
-        navigate('/home');
+        navigate('/login');
       } catch (e: unknown) {
         if (e instanceof AxiosError) {
           const error = e.response?.data as ApiError;

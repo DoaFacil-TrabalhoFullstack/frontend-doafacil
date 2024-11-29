@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { MdLocalShipping } from 'react-icons/md';
-import { AiOutlineSearch } from 'react-icons/ai';
 import { FiLogIn } from 'react-icons/fi';
-import { Button } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import AppRoutes from './Routes';
-import Nav from './components/Nav/Nav';
 import { AuthProvider } from './context/AuthProvider';
+import './styles.css';
 
 function App() {
   const token = localStorage.getItem('token');
+  const [email, setEmail] = useState('');
   //const [userName, setUserName] = useState("");
 
-  // useEffect(() => {
-  //     const storedUsername = localStorage.getItem("userName");
-  //     if (storedUsername) {
-  //         setUserName(storedUsername);
-  //     }
-  // }, []);
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('emailUser');
+    if (storedEmail) {
+      setEmail(storedEmail);
+    }
+  }, []);
 
   // const handleLogin = () => {
   //     alert("Por favor, faça o login primeiro.");
@@ -55,6 +55,16 @@ function App() {
               ></img>
             </a>
           </div>
+
+          {token ? (
+            <a href="/profile" className="profile">
+              <AccountCircleIcon />
+              <span className="username">{email}</span>
+            </a>
+          ) : (
+            <div></div>
+          )}
+
           <div className="user">
             <div className="icon">
               <FiLogIn />

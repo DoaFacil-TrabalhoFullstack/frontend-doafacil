@@ -1,3 +1,15 @@
 body {
   background-color: #c9e7e7;
 }
+
+.profile {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: red;
+  cursor: pointer;
+}
+
+.username {
+  margin: 0 10px;
+}
