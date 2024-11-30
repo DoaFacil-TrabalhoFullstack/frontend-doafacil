@@ -18,9 +18,9 @@ export default function Home() {
     const fetchProducts = async () => {
       try {
         const response = await httpClient.get<Product[]>('/products/list', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          // },
         });
         setProducts(response.data);
         console.log(response.data);
