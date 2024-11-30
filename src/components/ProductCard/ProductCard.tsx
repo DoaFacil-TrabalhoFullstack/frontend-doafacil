@@ -1,29 +1,21 @@
 import React from 'react';
+
 import './ProductCard.css';
+import { Product } from '../../shared/interfaces/Product.interface';
 
-interface ProductProps {
-  title: string;
-  description: string;
-  imageUrl: string;
-  url: string;
-}
-
-const ProductCard: React.FC<ProductProps> = ({
-  title,
-  description,
-  imageUrl,
-  url,
-}) => {
+const ProductCard: React.FC<Product> = (produto: Product) => {
   return (
-    <a href={url} className="linkProduct">
-      <img
-        src={imageUrl}
-        alt={title}
-        style={{ width: '100%', height: '150px', objectFit: 'cover' }}
-      />
-      <h3 className="productTitle">{title}</h3>
-      <p className="productDescription">{description}</p>
-    </a>
+    <div className="cardProduct" key={produto.id}>
+      <div className="cardProductTitle">
+        <span>{produto.name}</span>
+      </div>
+      <div className="cardProductDescription">
+        <span>{produto.description}</span>
+      </div>
+      <a className="LinkSeeMore" href={'/produto/' + produto.id}>
+        Ver mais
+      </a>
+    </div>
   );
 };
 

@@ -11,6 +11,7 @@ import {
 
 import httpClient from '../../shared/http-client/http-client';
 import { Product } from '../../shared/interfaces/Product.interface';
+import ProductCard from '../../components/ProductCard/ProductCard';
 
 const Produtos = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -93,29 +94,12 @@ const Produtos = () => {
       <div className="products">
         <div className="containerProducts">
           {currentProducts.map((currentProduct) => (
-            <Card
-              sx={{ minWidth: 275, margin: '0 10px' }}
+            <ProductCard
               key={currentProduct.id}
-            >
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  {currentProduct.name}
-                </Typography>
-                <Typography variant="body2">
-                  {currentProduct.description}
-                  <br />
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button
-                  size="small"
-                  variant="contained"
-                  href={'/produto/' + currentProduct.id}
-                >
-                  Ver mais
-                </Button>
-              </CardActions>
-            </Card>
+              id={currentProduct.id}
+              name={currentProduct.name}
+              description={currentProduct.description}
+            />
           ))}
         </div>
       </div>

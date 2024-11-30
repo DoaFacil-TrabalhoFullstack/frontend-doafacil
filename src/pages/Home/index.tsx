@@ -2,21 +2,13 @@ import React, { useEffect, useState } from 'react';
 
 import Footer from '../../components/Footer/Footer';
 
-import './styles.css';
+import './home.css';
 import httpClient from '../../shared/http-client/http-client';
 import { Product } from '../../shared/interfaces/Product.interface';
-
-import {
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
-  Button,
-} from '@mui/material';
+import ProductCard from '../../components/ProductCard/ProductCard';
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [search, setSearch] = useState('');
 
   const quantityHomeProducts = 5;
 
@@ -40,16 +32,6 @@ export default function Home() {
     fetchProducts();
   }, []);
 
-  //Filtrando por produtos (Novo, destaque e mais doado)
-
-  // const filtercate = (x: string) => {
-  //   const filterproduct = homeProduct.filter((curElm) => {
-  //     return curElm.type === x
-  //   })
-  //   setTrendingProduct(filterproduct)
-  // }
-  //produtos em alta
-
   return (
     <>
       <div className="home">
@@ -68,29 +50,35 @@ export default function Home() {
                     .slice(0, quantityHomeProducts)
                     .map((currentProduct) => {
                       return (
-                        <Card
-                          sx={{ minWidth: 275, margin: '50px 10px' }}
+                        // <Card
+                        //   sx={{ minWidth: 275, margin: '50px 10px' }}
+                        //   key={currentProduct.id}
+                        // >
+                        //   <CardContent>
+                        //     <Typography variant="h5" component="div">
+                        //       {currentProduct.name}
+                        //     </Typography>
+                        //     <Typography variant="body2">
+                        //       {currentProduct.description}
+                        //       <br />
+                        //     </Typography>
+                        //   </CardContent>
+                        //   <CardActions>
+                        //     <Button
+                        //       size="small"
+                        //       variant="contained"
+                        //       href={'/produto/' + currentProduct.id}
+                        //     >
+                        //       Ver mais
+                        //     </Button>
+                        //   </CardActions>
+                        // </Card>
+                        <ProductCard
                           key={currentProduct.id}
-                        >
-                          <CardContent>
-                            <Typography variant="h5" component="div">
-                              {currentProduct.name}
-                            </Typography>
-                            <Typography variant="body2">
-                              {currentProduct.description}
-                              <br />
-                            </Typography>
-                          </CardContent>
-                          <CardActions>
-                            <Button
-                              size="small"
-                              variant="contained"
-                              href={'/produto/' + currentProduct.id}
-                            >
-                              Ver mais
-                            </Button>
-                          </CardActions>
-                        </Card>
+                          id={currentProduct.id}
+                          name={currentProduct.name}
+                          description={currentProduct.description}
+                        />
                       );
                     })}
                 </div>
