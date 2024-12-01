@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import httpClient from '../../shared/http-client/http-client';
 import { Product } from '../../shared/interfaces/Product.interface';
+import ProductCard from '../../components/ProductCard/ProductCard';
 
 function MyProducts() {
   const [myProducts, setMyProducts] = useState<Product[]>([]);
+  //const [user, setUser] = useState();
 
   const token = localStorage.getItem('token');
 
@@ -12,17 +14,19 @@ function MyProducts() {
     const fetchProducts = async () => {
       try {
         const response = await httpClient.get<Product[]>(
-          '/products/list/:ownerId',
+          'products/list/ownerId',
           {
+            params: {
+              ownerId: 5, //setar o id do user logado
+            },
             headers: {
               Authorization: `Bearer ${token}`,
             },
           },
         );
         setMyProducts(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error('Erro ao buscar produtos:', error);
+      } catch (err) {
+        console.log('Erro ao carregar os produtos: ', err);
       }
     };
 
@@ -32,8 +36,17 @@ function MyProducts() {
   console.log(myProducts);
 
   return (
-    <div>
-      <h1>My Products</h1>
+    <div className="containerProducts">
+      {myProducts.map((currentProduct) => {
+        return (
+          <ProductCard
+            key={currentProduct.id}
+            id={currentProduct.id}
+            name={currentProduct.name}
+            description={currentProduct.description}
+          />
+        );
+      })}
     </div>
   );
 }

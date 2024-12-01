@@ -12,16 +12,10 @@ export default function Home() {
 
   const quantityHomeProducts = 5;
 
-  const token = localStorage.getItem('token');
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await httpClient.get<Product[]>('/products/list', {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
-        });
+        const response = await httpClient.get<Product[]>('/products/list', {});
         setProducts(response.data);
         console.log(response.data);
       } catch (error) {
@@ -50,29 +44,6 @@ export default function Home() {
                     .slice(0, quantityHomeProducts)
                     .map((currentProduct) => {
                       return (
-                        // <Card
-                        //   sx={{ minWidth: 275, margin: '50px 10px' }}
-                        //   key={currentProduct.id}
-                        // >
-                        //   <CardContent>
-                        //     <Typography variant="h5" component="div">
-                        //       {currentProduct.name}
-                        //     </Typography>
-                        //     <Typography variant="body2">
-                        //       {currentProduct.description}
-                        //       <br />
-                        //     </Typography>
-                        //   </CardContent>
-                        //   <CardActions>
-                        //     <Button
-                        //       size="small"
-                        //       variant="contained"
-                        //       href={'/produto/' + currentProduct.id}
-                        //     >
-                        //       Ver mais
-                        //     </Button>
-                        //   </CardActions>
-                        // </Card>
                         <ProductCard
                           key={currentProduct.id}
                           id={currentProduct.id}

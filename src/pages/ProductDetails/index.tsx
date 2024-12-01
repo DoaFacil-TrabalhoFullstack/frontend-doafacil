@@ -14,20 +14,6 @@ const ProductDetails = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const token = localStorage.getItem('token');
 
-  //   useEffect(() => {
-  //     // Buscar detalhes do produto pelo ID
-  //     // fetch(`https://api.example.com/produtos/${id}`)
-  //     //   .then((response) => response.json())
-  //     //   .then((data) => {
-  //     //     setProduct(data);
-  //     //     setLoading(false);
-  //     //   })
-  //     //   .catch((error) => {
-  //     //     console.error("Erro ao carregar produto:", error);
-  //     //     setLoading(false);
-  //     //   });
-  //   }, [id]);
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
