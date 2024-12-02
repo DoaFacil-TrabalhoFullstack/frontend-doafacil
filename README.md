@@ -1,46 +1,87 @@
-# DoaFácil
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
 
-In the project directory, you can run:
+<div align="center"> 
 
-### `npm start`
+<img width="35%" height="35%" src="https://avatars.githubusercontent.com/u/182142981?s=400&u=51ff84f456cd1a406bd3b82d9f4e5b35ba1c027e&v=4" alt="Doa Facil"/>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Projeto Doa Fácil
+Este é um projeto de um site com o intuito de permitir que usuários possam anunciar materiais de qualquer tipo para doação. Os interessados podem clicar no botão "Tenho Interesse" para se conectar com quem está oferecendo o item.
+</div>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<div align="center"> 
 
-### `npm test`
+# Funcionalidades
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Anunciar materiais para doação: Usuários CNPJ podem criar anúncios para materiais que desejam doar.
+Interesse nos materiais: Os visitantes do site podem clicar no botão "Tenho Interesse" em anúncios específicos, indicando que estão interessados em receber o material.
+Filtros de pesquisa: Filtros para ajudar os usuários a encontrar rapidamente o material desejado.
+</div> 
 
-### `npm run build`
+<div align="center"> 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Tecnologias Utilizadas
+</div align="center"> 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### TypeScript
+Para garantir um código mais robusto e tipado, utilizando as vantagens do TypeScript no desenvolvimento do frontend.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### React
+Biblioteca JavaScript para a construção da interface de usuário de forma eficiente.
 
-### `npm run eject`
+### HTML
+Para estruturar o conteúdo do site.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### CSS
+Para estilização e design responsivo do site.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Axios
+Para realizar requisições HTTP ao backend e gerenciar a comunicação com a API. 
+</div>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<div align="center"> 
+  
+# Instalação
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+</div>
+
+Para rodar o projeto localmente, siga as etapas abaixo:
+
+### 1. Clonar o repositório
+Clone o repositório para sua máquina local:
+
+#### `git clone https://github.com/DoaFacil-TrabalhoFullstack/frontend-doafacil.git`
+
+#### `cd doafacil`
+   
+
+### 2. Instalar as dependências
+Instale as dependências necessárias usando o npm ou yarn:
+
+#### `npm install`
+
+ou
+
+#### `yarn install`
+
+### 3. Rodar o servidor local
+Para rodar o projeto localmente, use o comando:
+
+#### `npm start`
+
+
+Ou, se estiver usando yarn:
+
+#### `yarn start`
+
+<p>
+  
+O servidor estará disponível em 
+#### `http://localhost:3000`.
+  
+</p>
+
+
