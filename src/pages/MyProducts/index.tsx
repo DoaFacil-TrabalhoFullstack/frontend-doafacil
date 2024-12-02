@@ -6,24 +6,14 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 
 function MyProducts() {
   const [myProducts, setMyProducts] = useState<Product[]>([]);
-  //const [user, setUser] = useState();
-
-  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await httpClient.get<Product[]>(
           'products/list/ownerId',
-          {
-            params: {
-              ownerId: 5, //setar o id do user logado
-            },
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
         );
+
         setMyProducts(response.data);
       } catch (err) {
         console.log('Erro ao carregar os produtos: ', err);
@@ -32,8 +22,6 @@ function MyProducts() {
 
     fetchProducts();
   }, []);
-
-  console.log(myProducts);
 
   return (
     <div className="containerProducts">

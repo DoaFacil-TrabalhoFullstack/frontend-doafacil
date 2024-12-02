@@ -32,7 +32,6 @@ const App = () => {
       });
 
       const user = response.data;
-      console.log(user);
       setUsername(user.name);
 
       if (user.cnpj) {
@@ -46,14 +45,6 @@ const App = () => {
       );
     }
   };
-
-  // const handleLogin = () => {
-  //     alert("Por favor, faça o login primeiro.");
-  // }
-
-  // const cadastrarProduto = () => {
-  //     alert('Carregar página cadastrar produto');
-  // }
 
   const handleLogout = () => {
     localStorage.clear();
@@ -79,8 +70,7 @@ const App = () => {
             <a href="/">
               <img
                 src="http://localhost:3000/image/logoDoafacil.png"
-                alt="logo"
-              ></img>
+                alt="logo"></img>
             </a>
           </div>
 
@@ -121,14 +111,18 @@ const App = () => {
               </a>
             </li>
             <li>
-              {isDonator ? (
-                <a href="/meus-produtos" className="link">
-                  Meus produtos
-                </a>
+              {username ? (
+                isDonator ? (
+                  <a href="/meus-produtos" className="link">
+                    Meus produtos
+                  </a>
+                ) : (
+                  <a href="/meus-interesses" className="link">
+                    Meus interesses
+                  </a>
+                )
               ) : (
-                <a href="/meus-interesses" className="link">
-                  Meus interesses
-                </a>
+                <></>
               )}
             </li>
           </ul>

@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 import axios from 'axios';
+import httpClient from '../../shared/http-client/http-client';
 
 const Profile = () => {
   const [userData, setUserData] = useState({
@@ -42,7 +43,6 @@ const Profile = () => {
       });
 
       const user = response.data;
-      console.log(response.data);
 
       setUserData({
         name: user.name,
@@ -81,7 +81,7 @@ const Profile = () => {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await axios.put(
+      const response = await httpClient.put(
         'http://localhost:8080/v1/users/update',
         {
           name: userData.name,
@@ -89,12 +89,8 @@ const Profile = () => {
           phone: userData.phone,
           cpf: userData.cpf,
           cnpj: userData.cnpj,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+          password: userData.password
+        }
       );
 
       console.log('Usuário atualizado com sucesso:', response.data);
@@ -148,6 +144,7 @@ const Profile = () => {
                 onChange={handleInputChange}
                 variant="outlined"
                 type="email"
+                disabled
               />
             </Grid>
             <Grid item xs={12}>

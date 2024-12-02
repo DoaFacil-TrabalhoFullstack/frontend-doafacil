@@ -80,13 +80,9 @@ export default function LoginForm() {
 
       localStorage.setItem('emailUser', loginUserPayload.email);
 
-      console.log(result.data);
-      alert('Logado com sucesso');
-
       login({}, token);
 
       navigate('/');
-      window.location.reload();
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         const error = e.response?.data as ApiError;

@@ -185,7 +185,7 @@ export default function RegisterForm() {
       {
         condition: (cpfError && cnpjError) || (!cpfInput && !cnpjInput),
         message: 'Preencha o campo CPF/CNPJ.',
-      },
+      }
     ];
 
     for (const { condition, message } of validations) {
@@ -220,11 +220,9 @@ export default function RegisterForm() {
 
         const { token } = result.data;
 
-        console.log(result);
-
         login({}, token);
 
-        navigate('/login');
+        alert("Usuário cadastrado com sucesso, agora faça login, por favor");
       } catch (e: unknown) {
         if (e instanceof AxiosError) {
           const error = e.response?.data as ApiError;
@@ -232,6 +230,8 @@ export default function RegisterForm() {
           setError(error.message);
         }
       }
+    } else {
+      alert("Algum campo está com dados inválidos. Por favor verifique");
     }
   };
 

@@ -20,18 +20,11 @@ const Produtos = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 18;
 
-  const token = localStorage.getItem('token');
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await httpClient.get<Product[]>('/products/list', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await httpClient.get<Product[]>('/products/list');
         setProducts(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
       }
@@ -40,7 +33,7 @@ const Produtos = () => {
     fetchProducts();
   }, []);
 
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const totalPages = products.length ? Math.ceil(products.length / productsPerPage) : 1;
 
   const currentProducts = products.slice(
     (currentPage - 1) * productsPerPage,

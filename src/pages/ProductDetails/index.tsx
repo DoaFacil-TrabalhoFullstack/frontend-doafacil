@@ -35,7 +35,6 @@ const ProductDetails = () => {
   const filterProduct = products.find(
     (produto) => produto.id.toString() === id,
   );
-  console.log(filterProduct);
 
   function verifyUserAndDonator(): boolean {
     const donator = localStorage.getItem('typePerson');
@@ -47,13 +46,17 @@ const ProductDetails = () => {
     return false;
   }
 
-  // if (loading) {
-  //     return <p>Carregando detalhes do produto...</p>;
-  // }
+  async function registerInterest(): Promise<void> {
+    try {
+      await httpClient.post('products/interested', {
+        productId: Number(id),
+      });
 
-  // if (!product) {
-  //     return <p>Produto não encontrado.</p>;
-  // }
+      alert("Interesse manifestado com sucesso!");
+    } catch (e: unknown) {
+      console.error(e);
+    }
+  }
 
   return (
     <>
@@ -72,10 +75,7 @@ const ProductDetails = () => {
               <Button
                 variant="outlined"
                 color="success"
-                onClick={() => {
-                  console.log('clciked');
-                }}
-              >
+                onClick={registerInterest}>
                 Tenho interesse
               </Button>
             )}
